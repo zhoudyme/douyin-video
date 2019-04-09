@@ -9,7 +9,7 @@
         <property name="endingDelimiter" value="`"/>
 
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-            <property name="mappers" value="com.zhoudongyu.utils.MyMapper"/>
+            <property name="mappers" value="me.zhoudongyu.utils.MyMapper"/>
         </plugin>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
@@ -19,13 +19,13 @@
         </jdbcConnection>
 
         <!-- 对应生成的pojo所在包 -->
-        <javaModelGenerator targetPackage="com.zhoudongyu.pojo" targetProject="mybatis-generatorConfig/src/main/java"/>
+        <javaModelGenerator targetPackage="me.zhoudongyu.pojo" targetProject="mybatis-generatorConfig/src/main/java"/>
 
 		<!-- 对应生成的mapper所在目录 -->
         <sqlMapGenerator targetPackage="mapper" targetProject="mybatis-generatorConfig/src/main/resources"/>
 
 		<!-- 配置mapper对应的java映射 -->
-        <javaClientGenerator targetPackage="com.zhoudongyu.mapper" targetProject="mybatis-generatorConfig/src/main/java"
+        <javaClientGenerator targetPackage="me.zhoudongyu.mapper" targetProject="mybatis-generatorConfig/src/main/java"
                              type="XMLMAPPER"/>
 
 

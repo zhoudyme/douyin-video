@@ -1,4 +1,4 @@
-package com.zhoudongyu.mybatis.utils;
+package me.zhoudongyu.mybatis.utils;
 
 import java.io.File;
 import java.util.ArrayList;
