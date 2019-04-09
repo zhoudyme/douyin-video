@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>me.zhoudongyu</groupId>
+    <artifactId>douyin-video</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>douyin-video-common</module>
+        <module>douyin-video-pojo</module>
+        <module>douyin-video-mapper</module>
+        <module>douyin-video-service</module>
+        <module>douyin-video-api</module>
+    </modules>
+
+
+    <name>仿抖音短视频</name>
+    <description>
+        maven
+        springMVC
+        springBoot
+        mybatis
+        mybatis-pagehelper
+        redis
+        ffmpeg
+        druid
+        mariadb/mysql
+        zookeeper
+    </description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.12.RELEASE</version>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+
+
+</project>
