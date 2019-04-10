@@ -44,7 +44,29 @@ public class RegistLoginController {
         } else {
             return JSONResult.errorMsg("用户名已经存在，请换一个再试");
         }
+        users.setPassword("");
+        return JSONResult.ok(users);
+    }
 
-        return JSONResult.ok();
+    @ApiOperation(value = "用户登录", notes = "用户登录的接口")
+    @PostMapping("login")
+    public JSONResult login(@RequestBody Users user) throws Exception {
+        String username = user.getUsername();
+        String password = user.getPassword();
+
+        //1.判断用户名和密码必须不为空
+        if (StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword())) {
+            return JSONResult.errorMsg("用户名和密码不能为空");
+        }
+
+        //2.判断用户是否存在
+        Users userResult = userService.queryUserForLogin(username, MD5Utils.getMD5Str(password));
+
+        if (userResult != null) {
+            userResult.setPassword("");
+            return JSONResult.ok(userResult);
+        } else {
+            return JSONResult.errorMsg("用户名或密码不正确，请重试");
+        }
     }
 }

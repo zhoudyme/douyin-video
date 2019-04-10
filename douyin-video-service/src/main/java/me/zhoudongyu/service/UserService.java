@@ -18,9 +18,18 @@ public interface UserService {
 
 
     /**
-     * 保证用户
+     * 保存用户
      *
      * @param users 用户信息
      */
     public void saveUseer(Users users);
+
+
+    /**
+     * 判断用户是否存在
+     *
+     * @param username 用户名
+     * @param password 密码
+     */
+    public Users queryUserForLogin(String username, String password);
 }
