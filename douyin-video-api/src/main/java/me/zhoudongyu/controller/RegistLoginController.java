@@ -1,5 +1,7 @@
 package me.zhoudongyu.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import me.zhoudongyu.pojo.Users;
 import me.zhoudongyu.service.UserService;
 import me.zhoudongyu.utils.JSONResult;
@@ -16,11 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
+@Api(value = "用户注册登录接口", tags = {"注册和登录Controller"})
 public class RegistLoginController {
 
     @Autowired
     private UserService userService;
 
+    @ApiOperation(value = "用户注册", notes = "用户注册接口")
     @PostMapping("regist")
     public JSONResult regist(@RequestBody Users users) throws Exception {
         //1.判断用户名和密码必须不为空

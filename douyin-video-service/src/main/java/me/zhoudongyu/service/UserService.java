@@ -1,13 +1,11 @@
 package me.zhoudongyu.service;
 
 import me.zhoudongyu.pojo.Users;
-import org.springframework.stereotype.Service;
 
 /**
  * @author Steve
  * @date 2019/04/09
  */
-@Service
 public interface UserService {
 
     /**

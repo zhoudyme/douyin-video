@@ -5,6 +5,7 @@ import me.zhoudongyu.pojo.Users;
 import me.zhoudongyu.service.UserService;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,9 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Steve
  * @date 2019/04/09
  */
+@Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+    @Autowired(required = false)
     private UsersMapper usersMapper;
 
     @Override
