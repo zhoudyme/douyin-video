@@ -1,4 +1,4 @@
-package me.zhoudongyu.common;
+package me.zhoudongyu.utils;
 
 /*
  * The MIT License (MIT)
