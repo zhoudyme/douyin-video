@@ -32,4 +32,9 @@ public interface UserService {
      * @param password 密码
      */
     public Users queryUserForLogin(String username, String password);
+
+    /**
+     * 用户修改信息
+     */
+    public void updateUserInfo(Users users);
 }
