@@ -51,9 +51,18 @@ public class UserServiceImpl implements UserService {
     public void updateUserInfo(Users user) {
         Example userExample = new Example(Users.class);
         Criteria criteria = userExample.createCriteria();
-        criteria.andEqualTo("id",user.getId());
-        usersMapper.updateByExampleSelective(user,userExample);
+        criteria.andEqualTo("id", user.getId());
+        usersMapper.updateByExampleSelective(user, userExample);
     }
 
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Users queryUserInfo(String userId) {
+        Example userExample = new Example(Users.class);
+        Criteria criteria = userExample.createCriteria();
+        criteria.andEqualTo("id", userId);
+        Users user = usersMapper.selectOneByExample(userExample);
+        return user;
+    }
 
 }

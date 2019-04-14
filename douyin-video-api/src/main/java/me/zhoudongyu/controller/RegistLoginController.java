@@ -11,6 +11,7 @@ import me.zhoudongyu.utils.MD5Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -89,7 +90,7 @@ public class RegistLoginController extends BasicController {
     @ApiOperation(value = "用户注销", notes = "用户注销的接口")
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,
             dataType = "String", paramType = "query")
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public JSONResult logout(String userId) {
         redis.del(USER_REDIS_SESSION + ":" + userId);
         return JSONResult.ok();

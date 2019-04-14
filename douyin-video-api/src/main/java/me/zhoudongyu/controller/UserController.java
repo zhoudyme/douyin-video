@@ -1,20 +1,19 @@
 package me.zhoudongyu.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import me.zhoudongyu.pojo.Users;
+import me.zhoudongyu.pojo.vo.UsersVO;
 import me.zhoudongyu.service.UserService;
 import me.zhoudongyu.utils.JSONResult;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -33,11 +32,12 @@ public class UserController extends BasicController {
     private UserService userService;
 
     @ApiOperation(value = "用户上传头像", notes = "用户上传头像接口")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+            dataType = "String", paramType = "query")
     @PostMapping("/uploadFace")
-    public JSONResult uploadFace(HttpServletRequest request, String userId, @RequestParam("file") MultipartFile[] files) throws Exception {
+    public JSONResult uploadFace(String userId, @RequestParam("file") MultipartFile[] files) throws Exception {
 
-        String path = request.getSession().getServletContext().getRealPath("/");
-        String fileSpace = path + "/fileSpace";
+        String fileSpace = "fileSpace";
 
         if (StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("用户id不能为空...");
@@ -84,6 +84,21 @@ public class UserController extends BasicController {
         user.setId(userId);
         user.setFaceImage(uploadPathDb);
         userService.updateUserInfo(user);
-        return JSONResult.ok();
+        return JSONResult.ok(uploadPathDb);
+    }
+
+    @ApiOperation(value = "查询用户信息", notes = "查询用户信息接口")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+            dataType = "String", paramType = "query")
+    @GetMapping("/query")
+    public JSONResult query(String userId) throws Exception {
+
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.errorMsg("用户id不能为空...");
+        }
+        Users userInfo = userService.queryUserInfo(userId);
+        UsersVO usersVO = new UsersVO();
+        BeanUtils.copyProperties(userInfo, usersVO);
+        return JSONResult.ok(usersVO);
     }
 }
