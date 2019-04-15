@@ -37,7 +37,7 @@ public class RegistLoginController extends BasicController {
         if (StringUtils.isBlank(users.getUsername()) || StringUtils.isBlank(users.getPassword())) {
             return JSONResult.errorMsg("用户名和密码不能为空");
         }
-        //2.庞端用户名是否存在
+        //2.判断用户名是否存在
         boolean userNameIsExist = userService.queryUserNameIsExist(users.getUsername());
         //3.保存
         if (!userNameIsExist) {
