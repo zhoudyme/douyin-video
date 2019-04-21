@@ -46,7 +46,7 @@ public class RegistLoginController extends BasicController {
             users.setFansCounts(0);
             users.setReceiveLikeCounts(0);
             users.setFollowCounts(0);
-            userService.saveUseer(users);
+            userService.saveUser(users);
         } else {
             return JSONResult.errorMsg("用户名已经存在，请换一个再试");
         }
@@ -55,9 +55,16 @@ public class RegistLoginController extends BasicController {
         return JSONResult.ok(setUserRedisSessionToken(users));
     }
 
+
+    /**
+     * 把用户token放进redis并返回提供给前端的用户对象
+     *
+     * @param users 用户对象
+     * @return 提供给前端的用户对象
+     */
     private UsersVO setUserRedisSessionToken(Users users) {
         String uniqueToken = UUID.randomUUID().toString();
-        redis.set(USER_REDIS_SESSION + ":" + users.getId(), uniqueToken, 1000 * 60 * 30);
+        redis.set(USER_REDIS_TOKEN + ":" + users.getId(), uniqueToken, 1000 * 60 * 30);
 
         UsersVO usersVO = new UsersVO();
         BeanUtils.copyProperties(users, usersVO);
@@ -92,7 +99,7 @@ public class RegistLoginController extends BasicController {
             dataType = "String", paramType = "query")
     @GetMapping("/logout")
     public JSONResult logout(String userId) {
-        redis.del(USER_REDIS_SESSION + ":" + userId);
+        redis.del(USER_REDIS_TOKEN + ":" + userId);
         return JSONResult.ok();
     }
 }

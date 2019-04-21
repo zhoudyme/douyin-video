@@ -91,7 +91,7 @@ public class UserController extends BasicController {
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,
             dataType = "String", paramType = "query")
     @GetMapping("/query")
-    public JSONResult query(String userId) throws Exception {
+    public JSONResult query(String userId) {
 
         if (StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("用户id不能为空...");

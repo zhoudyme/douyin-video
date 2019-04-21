@@ -1,7 +1,8 @@
 package me.zhoudongyu.utils;
 
 /**
- * @Description: 自定义响应数据结构
+ * 自定义响应数据结构
+ * <p>
  * 200：表示成功
  * 500：表示错误，错误信息在msg字段中
  * 501：bean验证错误，不管多少个错误都以map形式返回

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveUseer(Users users) {
+    public void saveUser(Users users) {
         users.setId(Sid.nextShort());
         usersMapper.insert(users);
     }
