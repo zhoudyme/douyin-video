@@ -21,4 +21,9 @@ public class BasicController {
      * 存放在redis中的用户token常量
      */
     protected static final String USER_REDIS_TOKEN = "user-redis-token";
+
+    /**
+     * ffmpeg所在目录
+     */
+    protected static final String ffmpegEXE = "D:\\Program Files (x86)\\ffmpeg\\bin\\ffmpeg.exe";
 }
