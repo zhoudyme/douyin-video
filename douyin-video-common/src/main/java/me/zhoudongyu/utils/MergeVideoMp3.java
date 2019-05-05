@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 合并音视频
+ *
  * @author Steve
  * @date 2019/05/04
  */

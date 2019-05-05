@@ -6,6 +6,7 @@ import me.zhoudongyu.pojo.Bgm;
 import me.zhoudongyu.pojo.Videos;
 import me.zhoudongyu.service.BgmService;
 import me.zhoudongyu.service.VideoService;
+import me.zhoudongyu.utils.FetchVideoCover;
 import me.zhoudongyu.utils.JSONResult;
 import me.zhoudongyu.utils.MergeVideoMp3;
 import org.apache.commons.io.IOUtils;
@@ -64,6 +65,8 @@ public class VideoController extends BasicController {
         }
 
         String uploadPathDb = fileSpace + "/" + userId + "/video";
+        String coverPathDb = fileSpace + "/" + userId + "/video";
+
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
 
@@ -72,10 +75,15 @@ public class VideoController extends BasicController {
             if (file != null) {
 
                 String fileName = file.getOriginalFilename();
+                String fileNamePrefix = fileName.split("\\.")[0];
+
+
                 if (StringUtils.isNotBlank(fileName)) {
 
                     //文件上传的最终保存路径
                     finalVideoPath = uploadPathDb + "/" + fileName;
+
+                    coverPathDb = coverPathDb + "/" + fileNamePrefix + ".jpg";
 
                     File outFile = new File(finalVideoPath);
                     if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
@@ -115,6 +123,11 @@ public class VideoController extends BasicController {
             tool.converetor(videoInputPath, mp3InputPath, videoSeconds, uploadPathDb);
         }
 
+        //对视频进行截图
+        FetchVideoCover videoInfo = new FetchVideoCover(ffmpegEXE);
+        videoInfo.getCover(uploadPathDb, coverPathDb);
+
+
         //保存视频信息到数据库
         Videos video = new Videos();
         video.setAudioId(bgmId);
@@ -124,9 +137,70 @@ public class VideoController extends BasicController {
         video.setVideoWidth(videoWidth);
         video.setVideoDesc(desc);
         video.setVideoPath(uploadPathDb);
+        video.setCoverPath(coverPathDb);
         video.setStatus(VideoStatusEnum.SUCCESS.value);
         video.setCreateTime(new Date());
-        videoService.saveVideo(video);
+        String videoId = videoService.saveVideo(video);
+        return JSONResult.ok(videoId);
+    }
+
+
+    @ApiOperation(value = "上传封面", notes = "上传封面的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "videoId", value = "视频主键id", required = true,
+                    dataType = "String", paramType = "form")
+
+    })
+    @PostMapping(value = "/uploadCover", headers = "content-type=multipart/form-data")
+    public JSONResult uploadCover(String userId, String videoId,
+                                  @ApiParam(value = "视频封面", required = true) MultipartFile file) throws Exception {
+
+        String fileSpace = "fileSpace";
+
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(videoId)) {
+            return JSONResult.errorMsg("用户id和视频主键id不能为空...");
+        }
+
+        String uploadPathDb = fileSpace + "/" + userId + "/video";
+        FileOutputStream fileOutputStream = null;
+        InputStream inputStream = null;
+
+        String finalCoverPath = "";
+        try {
+            if (file != null) {
+
+                String fileName = file.getOriginalFilename();
+                if (StringUtils.isNotBlank(fileName)) {
+
+                    //文件上传的最终保存路径
+                    finalCoverPath = uploadPathDb + "/" + fileName;
+
+                    File outFile = new File(finalCoverPath);
+                    if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
+                        //创建父文件夹
+                        outFile.getParentFile().mkdirs();
+                    }
+
+                    fileOutputStream = new FileOutputStream(outFile);
+                    inputStream = file.getInputStream();
+                    IOUtils.copy(inputStream, fileOutputStream);
+                }
+            } else {
+                return JSONResult.errorMsg("上传出错...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JSONResult.errorMsg("上传出错...");
+        } finally {
+            if (fileOutputStream != null) {
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            }
+        }
+
+        videoService.updateVideo(videoId, uploadPathDb);
         return JSONResult.ok();
     }
 }
