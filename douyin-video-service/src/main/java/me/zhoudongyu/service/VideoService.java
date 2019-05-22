@@ -1,6 +1,7 @@
 package me.zhoudongyu.service;
 
 import me.zhoudongyu.pojo.Videos;
+import me.zhoudongyu.utils.PagedResult;
 
 /**
  * 视频Service
@@ -25,4 +26,13 @@ public interface VideoService {
      * @param coverPath 封面路径
      */
     void updateVideo(String videoId, String coverPath);
+
+    /**
+     * 分页查询视频列表
+     *
+     * @param page     页数
+     * @param pageSize 分页大小
+     * @return 视频列表
+     */
+    PagedResult getAllVideos(Integer page, Integer pageSize);
 }

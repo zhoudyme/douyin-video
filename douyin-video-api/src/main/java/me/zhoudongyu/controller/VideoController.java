@@ -9,9 +9,11 @@ import me.zhoudongyu.service.VideoService;
 import me.zhoudongyu.utils.FetchVideoCover;
 import me.zhoudongyu.utils.JSONResult;
 import me.zhoudongyu.utils.MergeVideoMp3;
+import me.zhoudongyu.utils.PagedResult;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -114,7 +116,7 @@ public class VideoController extends BasicController {
             Bgm bgm = bgmService.queryBgmById(bgmId);
             String mp3InputPath = bgm.getPath();
 
-            MergeVideoMp3 tool = new MergeVideoMp3(ffmpegEXE);
+            MergeVideoMp3 tool = new MergeVideoMp3(FFPEG_EXE);
             String videoInputPath = finalVideoPath;
 
             String videoOutputName = UUID.randomUUID().toString() + ".mp4";
@@ -124,7 +126,7 @@ public class VideoController extends BasicController {
         }
 
         //对视频进行截图
-        FetchVideoCover videoInfo = new FetchVideoCover(ffmpegEXE);
+        FetchVideoCover videoInfo = new FetchVideoCover(FFPEG_EXE);
         videoInfo.getCover(uploadPathDb, coverPathDb);
 
 
@@ -202,5 +204,18 @@ public class VideoController extends BasicController {
 
         videoService.updateVideo(videoId, uploadPathDb);
         return JSONResult.ok();
+    }
+
+
+    @ApiOperation(value = "获取视频列表", notes = "获取视频列表的接口")
+    @GetMapping("showAll")
+    public JSONResult showAll(Integer page) throws Exception {
+
+        if (null == page) {
+            page = 1;
+        }
+
+        PagedResult result = videoService.getAllVideos(page, PAGE_SIZE);
+        return JSONResult.ok(result);
     }
 }
