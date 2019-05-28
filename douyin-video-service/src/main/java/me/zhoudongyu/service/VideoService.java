@@ -3,6 +3,8 @@ package me.zhoudongyu.service;
 import me.zhoudongyu.pojo.Videos;
 import me.zhoudongyu.utils.PagedResult;
 
+import java.util.List;
+
 /**
  * 视频Service
  *
@@ -34,5 +36,12 @@ public interface VideoService {
      * @param pageSize 分页大小
      * @return 视频列表
      */
-    PagedResult getAllVideos(Integer page, Integer pageSize);
+    PagedResult getAllVideos(Videos video, Integer isSaveRecord, Integer page, Integer pageSize);
+
+    /**
+     * 获取热搜词列表
+     *
+     * @return 热搜词列表
+     */
+    List<String> getGotWords();
 }

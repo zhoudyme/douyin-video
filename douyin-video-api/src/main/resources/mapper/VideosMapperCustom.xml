@@ -20,11 +20,16 @@
     <result column="face_image" jdbcType="VARCHAR" property="faceImage" />
     <result column="nickname" jdbcType="VARCHAR" property="nickName" />
   </resultMap>
-  
-  <select id="queryAllVideo" resultMap="BaseResultMap">
+
+  <select id="queryAllVideo" resultMap="BaseResultMap" parameterType="String">
     select v.*,u.face_image as face_image,u.nickname as nickname from videos v
     left join users u on u.id = v.user_id
-    where v.status = 1
+    where
+    1 = 1
+    <if test=" videoDesc != null and videoDesc != '' ">
+      and v.video_desc like '%${videoDesc}%'
+    </if>
+    and v.status = 1
     order by v.create_time desc
   </select>
 </mapper>

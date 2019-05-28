@@ -8,4 +8,8 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="content" jdbcType="VARCHAR" property="content" />
   </resultMap>
+
+  <select id="getHotWords" resultType="String">
+     select content from search_records group by content order by count(content) desc
+  </select>
 </mapper>

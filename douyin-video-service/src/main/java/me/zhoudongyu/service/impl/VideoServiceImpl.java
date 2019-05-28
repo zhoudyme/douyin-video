@@ -2,8 +2,10 @@ package me.zhoudongyu.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import me.zhoudongyu.mapper.SearchRecordsMapper;
 import me.zhoudongyu.mapper.VideosMapper;
 import me.zhoudongyu.mapper.VideosMapperCustom;
+import me.zhoudongyu.pojo.SearchRecords;
 import me.zhoudongyu.pojo.Videos;
 import me.zhoudongyu.pojo.vo.VideosVO;
 import me.zhoudongyu.service.VideoService;
@@ -29,6 +31,9 @@ public class VideoServiceImpl implements VideoService {
     @Autowired
     private VideosMapperCustom videosMapperCustom;
 
+    @Autowired
+    private SearchRecordsMapper searchRecordsMapper;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public String saveVideo(Videos video) {
@@ -49,9 +54,20 @@ public class VideoServiceImpl implements VideoService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public PagedResult getAllVideos(Integer page, Integer pageSize) {
+    public PagedResult getAllVideos(Videos video, Integer isSaveRecord, Integer page, Integer pageSize) {
+
+        //保存热搜词
+        String desc = video.getVideoDesc();
+        if (isSaveRecord != null && isSaveRecord == 1) {
+            SearchRecords record = new SearchRecords();
+            String recordId = Sid.nextShort();
+            record.setId(recordId);
+            record.setContent(desc);
+            searchRecordsMapper.insert(record);
+        }
+
         PageHelper.startPage(page, pageSize);
-        List<VideosVO> list = videosMapperCustom.queryAllVideo();
+        List<VideosVO> list = videosMapperCustom.queryAllVideo(desc);
         PageInfo<VideosVO> pageList = new PageInfo<>(list);
 
         PagedResult pagedResult = new PagedResult();
@@ -61,5 +77,11 @@ public class VideoServiceImpl implements VideoService {
         pagedResult.setRecords(pageList.getTotal());
 
         return pagedResult;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<String> getGotWords() {
+        return searchRecordsMapper.getHotWords();
     }
 }
