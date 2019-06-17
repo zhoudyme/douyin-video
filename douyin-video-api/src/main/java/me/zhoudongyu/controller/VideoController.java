@@ -63,12 +63,13 @@ public class VideoController extends BasicController {
             return JSONResult.errorMsg("用户id不能为空...");
         }
 
-        String uploadPathDb = fileSpace + "/" + userId + "/video";
-        String coverPathDb = fileSpace + "/" + userId + "/video";
+        String uploadPathDB = "/" + userId + "/video";
+        String coverPathDb =  "/" + userId + "/video";
 
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
 
+        // 文件上传的最终保存路径
         String finalVideoPath = "";
         try {
             if (file != null) {
@@ -80,8 +81,10 @@ public class VideoController extends BasicController {
                 if (StringUtils.isNotBlank(fileName)) {
 
                     //文件上传的最终保存路径
-                    finalVideoPath = uploadPathDb + "/" + fileName;
+                    finalVideoPath = fileSpace + uploadPathDB + "/" + fileName;
 
+                    // 设置数据库保存的路径
+                    uploadPathDB += ("/" + fileName);
                     coverPathDb = coverPathDb + "/" + fileNamePrefix + ".jpg";
 
                     File outFile = new File(finalVideoPath);
@@ -118,13 +121,14 @@ public class VideoController extends BasicController {
 
             String videoOutputName = UUID.randomUUID().toString() + ".mp4";
 
-            uploadPathDb += "/" + videoOutputName;
-            tool.converetor(videoInputPath, mp3InputPath, videoSeconds, uploadPathDb);
+            uploadPathDB = "/" + userId + "/video" + "/" + videoOutputName;
+            finalVideoPath = fileSpace + uploadPathDB;
+            tool.converetor(videoInputPath, mp3InputPath, videoSeconds, finalVideoPath);
         }
 
         //对视频进行截图
         FetchVideoCover videoInfo = new FetchVideoCover(FFPEG_EXE);
-        videoInfo.getCover(uploadPathDb, coverPathDb);
+        videoInfo.getCover(uploadPathDB, coverPathDb);
 
 
         //保存视频信息到数据库
@@ -135,7 +139,7 @@ public class VideoController extends BasicController {
         video.setVideoHeight(videoHeight);
         video.setVideoWidth(videoWidth);
         video.setVideoDesc(desc);
-        video.setVideoPath(uploadPathDb);
+        video.setVideoPath(uploadPathDB);
         video.setCoverPath(coverPathDb);
         video.setStatus(VideoStatusEnum.SUCCESS.value);
         video.setCreateTime(new Date());
