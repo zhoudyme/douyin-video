@@ -4,4 +4,18 @@ import me.zhoudongyu.pojo.Users;
 import me.zhoudongyu.utils.MyMapper;
 
 public interface UsersMapper extends MyMapper<Users> {
+
+    /**
+     * 用户受喜欢数累加
+     *
+     * @param userId 用户Id
+     */
+    void addReceiveLikeCount(String userId);
+
+    /**
+     * 用户受喜欢数累减
+     *
+     * @param userId 用户Id
+     */
+    void reduceReceiveLikeCount(String userId);
 }

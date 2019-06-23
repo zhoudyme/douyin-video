@@ -64,7 +64,7 @@ public class VideoController extends BasicController {
         }
 
         String uploadPathDB = "/" + userId + "/video";
-        String coverPathDb =  "/" + userId + "/video";
+        String coverPathDb = "/" + userId + "/video";
 
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
@@ -226,4 +226,19 @@ public class VideoController extends BasicController {
 
         return JSONResult.ok(videoService.getGotWords());
     }
+
+    @ApiOperation(value = "用户点赞视频", notes = "用户点赞视频的接口")
+    @PostMapping("/userLike")
+    public JSONResult userLike(String userId, String videoId, String videoCreatorId) {
+        videoService.userLikeVideo(userId, videoId, videoCreatorId);
+        return JSONResult.ok();
+    }
+
+    @ApiOperation(value = "用户取消点赞视频", notes = "用户取消点赞视频的接口")
+    @PostMapping("/userUnLike")
+    public JSONResult userUnLike(String userId, String videoId, String videoCreatorId) {
+        videoService.userUnLikeVideo(userId, videoId, videoCreatorId);
+        return JSONResult.ok();
+    }
+
 }
