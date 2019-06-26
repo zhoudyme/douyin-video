@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import me.zhoudongyu.pojo.Users;
+import me.zhoudongyu.pojo.vo.PublishVideo;
 import me.zhoudongyu.pojo.vo.UsersVO;
 import me.zhoudongyu.service.UserService;
 import me.zhoudongyu.utils.JSONResult;
@@ -100,5 +101,28 @@ public class UserController extends BasicController {
         UsersVO usersVO = new UsersVO();
         BeanUtils.copyProperties(userInfo, usersVO);
         return JSONResult.ok(usersVO);
+    }
+
+    @PostMapping("/queryPublisher")
+    public JSONResult queryPublisher(String loginUserId, String videoId,
+                                     String publishUserId) {
+
+        if ( StringUtils.isBlank(publishUserId)) {
+            return JSONResult.errorMsg("发布者Id不能为空");
+        }
+
+        //1、查询视频发布者的信息
+        Users userInfo = userService.queryUserInfo(publishUserId);
+        UsersVO publisher = new UsersVO();
+        BeanUtils.copyProperties(userInfo, publisher);
+
+        //2、查询当前登陆者和视频的点赞关系
+        boolean userLikeVideo = userService.isUserLikeVideo(loginUserId, videoId);
+
+        PublishVideo bean = new PublishVideo();
+        bean.setPublisher(publisher);
+        bean.setUserLikeVideo(userLikeVideo);
+
+        return JSONResult.ok(bean);
     }
 }
