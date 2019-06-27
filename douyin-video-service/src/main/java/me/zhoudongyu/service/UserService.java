@@ -60,4 +60,29 @@ public interface UserService {
      */
     boolean isUserLikeVideo(String userId, String videoId);
 
+    /**
+     * 增加用户和粉丝的关系
+     *
+     * @param userId
+     * @param fanId
+     */
+    void saveUserFanRelation(String userId, String fanId);
+
+    /**
+     * 删除用户和粉丝的关系
+     *
+     * @param userId
+     * @param fanId
+     */
+    void deleteUserFanRelation(String userId, String fanId);
+
+
+    /**
+     * 查询用户是否关注
+     *
+     * @param userId 用户id
+     * @param fanId  粉丝id
+     * @return
+     */
+    boolean queryIfFollow(String userId, String fanId);
 }

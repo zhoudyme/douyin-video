@@ -2,6 +2,7 @@ package me.zhoudongyu.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import me.zhoudongyu.pojo.Users;
 import me.zhoudongyu.pojo.vo.PublishVideo;
@@ -89,10 +90,16 @@ public class UserController extends BasicController {
     }
 
     @ApiOperation(value = "查询用户信息", notes = "查询用户信息接口")
-    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
-            dataType = "String", paramType = "query")
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "fanId", value = "粉丝id", required = false,
+                    dataType = "String", paramType = "query")
+
+    })
     @GetMapping("/query")
-    public JSONResult query(String userId) {
+    public JSONResult query(String userId, String fanId) {
 
         if (StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("用户id不能为空...");
@@ -100,6 +107,9 @@ public class UserController extends BasicController {
         Users userInfo = userService.queryUserInfo(userId);
         UsersVO usersVO = new UsersVO();
         BeanUtils.copyProperties(userInfo, usersVO);
+
+
+        usersVO.setFollow(userService.queryIfFollow(userId, fanId));
         return JSONResult.ok(usersVO);
     }
 
@@ -107,7 +117,7 @@ public class UserController extends BasicController {
     public JSONResult queryPublisher(String loginUserId, String videoId,
                                      String publishUserId) {
 
-        if ( StringUtils.isBlank(publishUserId)) {
+        if (StringUtils.isBlank(publishUserId)) {
             return JSONResult.errorMsg("发布者Id不能为空");
         }
 
@@ -125,4 +135,25 @@ public class UserController extends BasicController {
 
         return JSONResult.ok(bean);
     }
+
+    @PostMapping("/beYourFans")
+    public JSONResult beYourFans(String userId, String fanId) {
+
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(fanId)) {
+            return JSONResult.errorMsg("用户id或粉丝id不能为空...");
+        }
+        userService.saveUserFanRelation(userId, fanId);
+        return JSONResult.ok("关注成功");
+    }
+
+    @PostMapping("/dontBeYourFans")
+    public JSONResult dontBeYourFans(String userId, String fanId) {
+
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(fanId)) {
+            return JSONResult.errorMsg("用户id或粉丝id不能为空...");
+        }
+        userService.deleteUserFanRelation(userId, fanId);
+        return JSONResult.ok("取消关注成功");
+    }
+
 }

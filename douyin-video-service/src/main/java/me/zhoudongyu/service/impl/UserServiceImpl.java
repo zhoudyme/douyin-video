@@ -1,8 +1,10 @@
 package me.zhoudongyu.service.impl;
 
+import me.zhoudongyu.mapper.UsersFansMapper;
 import me.zhoudongyu.mapper.UsersLikeVideosMapper;
 import me.zhoudongyu.mapper.UsersMapper;
 import me.zhoudongyu.pojo.Users;
+import me.zhoudongyu.pojo.UsersFans;
 import me.zhoudongyu.pojo.UsersLikeVideos;
 import me.zhoudongyu.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -26,8 +28,11 @@ public class UserServiceImpl implements UserService {
     @Autowired(required = false)
     private UsersMapper usersMapper;
 
-    @Autowired
+    @Autowired(required = false)
     private UsersLikeVideosMapper usersLikeVideosMapper;
+
+    @Autowired(required = false)
+    private UsersFansMapper usersFansMapper;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -86,6 +91,48 @@ public class UserServiceImpl implements UserService {
         criteria.andEqualTo("videoId", videoId);
         List<UsersLikeVideos> usersLikeVideosList = usersLikeVideosMapper.selectByExample(example);
         return null != usersLikeVideosList && usersLikeVideosList.size() > 0;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveUserFanRelation(String userId, String fanId) {
+        UsersFans usersFan = new UsersFans();
+        String relId = Sid.nextShort();
+        usersFan.setId(relId);
+        usersFan.setUserId(userId);
+        usersFan.setFanId(fanId);
+        usersFansMapper.insert(usersFan);
+
+        usersMapper.addFansCount(userId);
+        usersMapper.addFollowerCount(fanId);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteUserFanRelation(String userId, String fanId) {
+        Example example = new Example(UsersFans.class);
+        Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("fanId", fanId);
+
+        usersFansMapper.deleteByExample(example);
+        usersMapper.reduceFansCount(userId);
+        usersMapper.reduceFollowerCount(fanId);
+
+    }
+
+    @Override
+    public boolean queryIfFollow(String userId, String fanId) {
+
+        Example example = new Example(UsersFans.class);
+        Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("fanId", fanId);
+
+        List<UsersFans> usersFansList = usersFansMapper.selectByExample(example);
+        return null != usersFansList && !usersFansList.isEmpty();
     }
 
 }
