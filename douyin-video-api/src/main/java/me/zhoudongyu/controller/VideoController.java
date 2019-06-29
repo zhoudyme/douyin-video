@@ -241,4 +241,48 @@ public class VideoController extends BasicController {
         return JSONResult.ok();
     }
 
+    /**
+     * 我关注的人发的视频
+     */
+    @PostMapping("/showMyFollow")
+    public JSONResult showMyFollow(String userId, Integer page) throws Exception {
+
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.ok();
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        int pageSize = 6;
+
+        PagedResult videosList = videoService.queryMyFollowVideos(userId, page, pageSize);
+
+        return JSONResult.ok(videosList);
+    }
+
+    /**
+     * 我收藏(点赞)过的视频列表
+     */
+    @PostMapping("/showMyLike")
+    public JSONResult showMyLike(String userId, Integer page, Integer pageSize) throws Exception {
+
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.ok();
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 6;
+        }
+
+        PagedResult videosList = videoService.queryMyLikeVideos(userId, page, pageSize);
+
+        return JSONResult.ok(videosList);
+    }
+
 }
