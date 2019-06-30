@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import me.zhoudongyu.pojo.Users;
+import me.zhoudongyu.pojo.UsersReport;
 import me.zhoudongyu.pojo.vo.PublishVideo;
 import me.zhoudongyu.pojo.vo.UsersVO;
 import me.zhoudongyu.service.UserService;
@@ -154,6 +155,15 @@ public class UserController extends BasicController {
         }
         userService.deleteUserFanRelation(userId, fanId);
         return JSONResult.ok("取消关注成功");
+    }
+
+    @PostMapping("/reportUser")
+    public JSONResult reportUser(@RequestBody UsersReport usersReport) {
+
+        // 保存举报信息
+        userService.reportUser(usersReport);
+
+        return JSONResult.errorMsg("举报成功...有你平台变得更美好...");
     }
 
 }

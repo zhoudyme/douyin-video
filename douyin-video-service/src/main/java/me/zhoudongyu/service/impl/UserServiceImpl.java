@@ -3,9 +3,11 @@ package me.zhoudongyu.service.impl;
 import me.zhoudongyu.mapper.UsersFansMapper;
 import me.zhoudongyu.mapper.UsersLikeVideosMapper;
 import me.zhoudongyu.mapper.UsersMapper;
+import me.zhoudongyu.mapper.UsersReportMapper;
 import me.zhoudongyu.pojo.Users;
 import me.zhoudongyu.pojo.UsersFans;
 import me.zhoudongyu.pojo.UsersLikeVideos;
+import me.zhoudongyu.pojo.UsersReport;
 import me.zhoudongyu.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired(required = false)
     private UsersFansMapper usersFansMapper;
+
+    @Autowired(required = false)
+    private UsersReportMapper usersReportMapper;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -134,5 +140,18 @@ public class UserServiceImpl implements UserService {
         List<UsersFans> usersFansList = usersFansMapper.selectByExample(example);
         return null != usersFansList && !usersFansList.isEmpty();
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+
+    @Override
+    public void reportUser(UsersReport userReport) {
+        String urId = Sid.nextShort();
+        userReport.setId(urId);
+        userReport.setCreateDate(new Date());
+
+        usersReportMapper.insert(userReport);
+
+    }
+
 
 }

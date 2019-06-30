@@ -1,6 +1,7 @@
 package me.zhoudongyu.service;
 
 import me.zhoudongyu.pojo.Users;
+import me.zhoudongyu.pojo.UsersReport;
 
 /**
  * 用户Service
@@ -85,4 +86,11 @@ public interface UserService {
      * @return
      */
     boolean queryIfFollow(String userId, String fanId);
+
+    /**
+     * 举报用户
+     *
+     * @param userReport
+     */
+    void reportUser(UsersReport userReport);
 }
