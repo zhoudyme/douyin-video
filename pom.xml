@@ -20,15 +20,11 @@
     <name>仿抖音短视频</name>
     <description>
         maven
-        springMVC
         springBoot
         mybatis
-        mybatis-pagehelper
         redis
         ffmpeg
         druid
-        mariadb/mysql
-        zookeeper
     </description>
 
     <parent>
@@ -42,7 +38,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
     </properties>
-
 
 
 </project>

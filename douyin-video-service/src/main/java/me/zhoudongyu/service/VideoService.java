@@ -1,5 +1,6 @@
 package me.zhoudongyu.service;
 
+import me.zhoudongyu.pojo.Comments;
 import me.zhoudongyu.pojo.Videos;
 import me.zhoudongyu.utils.PagedResult;
 
@@ -82,4 +83,21 @@ public interface VideoService {
      * @param pageSize 页数
      */
     PagedResult queryMyFollowVideos(String userId, Integer page, Integer pageSize);
+
+    /**
+     * 用户留言
+     *
+     * @param comment
+     */
+    void saveComment(Comments comment);
+
+    /**
+     * 留言分页
+     *
+     * @param videoId  视频id
+     * @param page     页码
+     * @param pageSize 页数
+     * @return
+     */
+    PagedResult getAllComments(String videoId, Integer page, Integer pageSize);
 }

@@ -3,6 +3,7 @@ package me.zhoudongyu.controller;
 import io.swagger.annotations.*;
 import me.zhoudongyu.enums.VideoStatusEnum;
 import me.zhoudongyu.pojo.Bgm;
+import me.zhoudongyu.pojo.Comments;
 import me.zhoudongyu.pojo.Videos;
 import me.zhoudongyu.service.BgmService;
 import me.zhoudongyu.service.VideoService;
@@ -283,6 +284,47 @@ public class VideoController extends BasicController {
         PagedResult videosList = videoService.queryMyLikeVideos(userId, page, pageSize);
 
         return JSONResult.ok(videosList);
+    }
+
+    /**
+     * 保存评论
+     *
+     * @param comment
+     * @param fatherCommentId
+     * @param toUserId
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/saveComment")
+    public JSONResult saveComment(@RequestBody Comments comment,
+                                  String fatherCommentId, String toUserId) {
+
+        comment.setFatherCommentId(fatherCommentId);
+        comment.setToUserId(toUserId);
+
+        videoService.saveComment(comment);
+        return JSONResult.ok();
+    }
+
+    @PostMapping("/getVideoComments")
+    public JSONResult getVideoComments(String videoId, Integer page, Integer pageSize) throws Exception {
+
+        if (StringUtils.isBlank(videoId)) {
+            return JSONResult.ok();
+        }
+
+        // 分页查询视频列表，时间顺序倒序排序
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+
+        PagedResult list = videoService.getAllComments(videoId, page, pageSize);
+
+        return JSONResult.ok(list);
     }
 
 }
