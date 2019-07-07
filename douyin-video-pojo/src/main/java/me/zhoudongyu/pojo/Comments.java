@@ -1,15 +1,23 @@
 package me.zhoudongyu.pojo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import javax.persistence.*;
 
+@ApiModel(value = "视频评论实体", description = "视频评论实体")
 public class Comments {
+
+    @ApiModelProperty(hidden = true)
     @Id
     private String id;
 
+    @ApiModelProperty(hidden = true)
     @Column(name = "father_comment_id")
     private String fatherCommentId;
 
+    @ApiModelProperty(hidden = true)
     @Column(name = "to_user_id")
     private String toUserId;
 
@@ -25,6 +33,7 @@ public class Comments {
     @Column(name = "from_user_id")
     private String fromUserId;
 
+    @ApiModelProperty(hidden = true)
     @Column(name = "create_time")
     private Date createTime;
 

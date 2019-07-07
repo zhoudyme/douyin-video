@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Column;
 import javax.persistence.Id;
 
-@ApiModel(value = "用户", description = "用户对象")
+@ApiModel(value = "用户实体", description = "用户实体")
 public class Users {
 
     @ApiModelProperty(hidden = true)

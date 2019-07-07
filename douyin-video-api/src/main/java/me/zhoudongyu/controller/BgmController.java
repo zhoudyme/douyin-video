@@ -23,7 +23,7 @@ public class BgmController {
     private BgmService bgmService;
 
     @ApiOperation(value = "获取背景音乐列表", notes = "获取背景音乐列表的接口")
-    @GetMapping("list")
+    @GetMapping("/list")
     public JSONResult list() {
         return JSONResult.ok(bgmService.queryBgmList());
     }

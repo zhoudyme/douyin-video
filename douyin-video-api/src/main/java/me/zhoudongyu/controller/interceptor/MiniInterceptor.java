@@ -54,7 +54,7 @@ public class MiniInterceptor implements HandlerInterceptor {
     }
 
 
-    public void returnErrorResponse(HttpServletResponse response, JSONResult result)
+    private void returnErrorResponse(HttpServletResponse response, JSONResult result)
             throws IOException {
         OutputStream out = null;
         try {

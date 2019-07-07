@@ -34,7 +34,7 @@ public class UserController extends BasicController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "用户上传头像", notes = "用户上传头像接口")
+    @ApiOperation(value = "用户上传头像", notes = "根据用户id上传头像接口")
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,
             dataType = "String", paramType = "query")
     @PostMapping("/uploadFace")
@@ -90,14 +90,12 @@ public class UserController extends BasicController {
         return JSONResult.ok(uploadPathDb);
     }
 
-    @ApiOperation(value = "查询用户信息", notes = "查询用户信息接口")
-
+    @ApiOperation(value = "查询用户信息", notes = "根据用户id、粉丝id查询用户信息接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户id", required = true,
                     dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "fanId", value = "粉丝id", required = false,
                     dataType = "String", paramType = "query")
-
     })
     @GetMapping("/query")
     public JSONResult query(String userId, String fanId) {
@@ -114,6 +112,15 @@ public class UserController extends BasicController {
         return JSONResult.ok(usersVO);
     }
 
+    @ApiOperation(value = "查询视频发布者和视频视频点赞信息", notes = "根据登录用户id、视频id和视频发布者id来查询视频发布者和视频视频点赞信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "loginUserId", value = "登录用户id", required = false,
+                    dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "videoId", value = "视频id", required = false,
+                    dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "publishUserId", value = "视频发布者id", required = true,
+                    dataType = "String", paramType = "query")
+    })
     @PostMapping("/queryPublisher")
     public JSONResult queryPublisher(String loginUserId, String videoId,
                                      String publishUserId) {
@@ -137,6 +144,14 @@ public class UserController extends BasicController {
         return JSONResult.ok(bean);
     }
 
+
+    @ApiOperation(value = "关注用户", notes = "粉丝关注用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "fanId", value = "粉丝id", required = true,
+                    dataType = "String", paramType = "query")
+    })
     @PostMapping("/beYourFans")
     public JSONResult beYourFans(String userId, String fanId) {
 
@@ -147,6 +162,13 @@ public class UserController extends BasicController {
         return JSONResult.ok("关注成功");
     }
 
+    @ApiOperation(value = "取消关注用户", notes = "粉丝取消关注用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "fanId", value = "粉丝id", required = true,
+                    dataType = "String", paramType = "query")
+    })
     @PostMapping("/dontBeYourFans")
     public JSONResult dontBeYourFans(String userId, String fanId) {
 
@@ -157,6 +179,7 @@ public class UserController extends BasicController {
         return JSONResult.ok("取消关注成功");
     }
 
+    @ApiOperation(value = "用户举报视频", notes = "粉丝取消关注用户")
     @PostMapping("/reportUser")
     public JSONResult reportUser(@RequestBody UsersReport usersReport) {
 

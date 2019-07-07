@@ -1,10 +1,16 @@
 package me.zhoudongyu.pojo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.util.Date;
 
+@ApiModel(value = "视频实体", description = "视频实体")
 public class Videos {
+
+    @ApiModelProperty(hidden = true)
     @Id
     private String id;
 
@@ -64,14 +70,15 @@ public class Videos {
 
     /**
      * 视频状态：
-1、发布成功
-2、禁止播放，管理员操作
+     * 1、发布成功
+     * 2、禁止播放，管理员操作
      */
     private Integer status;
 
     /**
      * 创建时间
      */
+    @ApiModelProperty(hidden = true)
     @Column(name = "create_time")
     private Date createTime;
 
@@ -253,12 +260,12 @@ public class Videos {
 
     /**
      * 获取视频状态：
-1、发布成功
-2、禁止播放，管理员操作
+     * 1、发布成功
+     * 2、禁止播放，管理员操作
      *
      * @return status - 视频状态：
-1、发布成功
-2、禁止播放，管理员操作
+     * 1、发布成功
+     * 2、禁止播放，管理员操作
      */
     public Integer getStatus() {
         return status;
@@ -266,12 +273,12 @@ public class Videos {
 
     /**
      * 设置视频状态：
-1、发布成功
-2、禁止播放，管理员操作
+     * 1、发布成功
+     * 2、禁止播放，管理员操作
      *
      * @param status 视频状态：
-1、发布成功
-2、禁止播放，管理员操作
+     *               1、发布成功
+     *               2、禁止播放，管理员操作
      */
     public void setStatus(Integer status) {
         this.status = status;

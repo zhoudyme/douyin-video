@@ -18,7 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-public class Swagger2 {
+public class Swagger2Config {
 
     /**
      * swagger2的配置文件，配置swagger2的一些基本的内容，比如扫描的包等等
@@ -34,7 +34,7 @@ public class Swagger2 {
      * 构建api文档信息
      */
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("使用swagger2构建短视频后端api接口文档")
+        return new ApiInfoBuilder().title("短视频后端api接口文档")
                 .contact(new Contact("zhoudongyu", "https://github.com/SteveZhou8", ""))
                 .description("欢迎访问短视频接口文档")
                 .version("1.0").build();
