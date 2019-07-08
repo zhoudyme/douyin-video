@@ -76,7 +76,7 @@ public class VideoController extends BasicController {
             if (file != null) {
 
                 String fileName = file.getOriginalFilename();
-                String fileNamePrefix = fileName.split("\\.")[0];
+                String fileNamePrefix = fileName.split("\\.")[2];
 
 
                 if (StringUtils.isNotBlank(fileName)) {
@@ -122,14 +122,14 @@ public class VideoController extends BasicController {
 
             String videoOutputName = UUID.randomUUID().toString() + ".mp4";
 
-            uploadPathDB = "/" + userId + "/video" + "/" + videoOutputName;
-            finalVideoPath = fileSpace + uploadPathDB;
+            uploadPathDB = fileSpace + "/" + userId + "/video" + "/" + videoOutputName;
+            finalVideoPath = uploadPathDB;
             tool.converetor(videoInputPath, mp3InputPath, videoSeconds, finalVideoPath);
         }
 
         //对视频进行截图
         FetchVideoCover videoInfo = new FetchVideoCover(FFPEG_EXE);
-        videoInfo.getCover(uploadPathDB, coverPathDb);
+        videoInfo.getCover(uploadPathDB, fileSpace + coverPathDb);
 
 
         //保存视频信息到数据库

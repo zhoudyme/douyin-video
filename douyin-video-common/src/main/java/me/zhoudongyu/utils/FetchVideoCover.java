@@ -16,7 +16,7 @@ public class FetchVideoCover {
     // 视频路径
     private String ffmpegEXE;
 
-    public void getCover(String videoInputPath, String coverOutputPath) throws IOException, InterruptedException {
+    public void getCover(String videoInputPath, String coverOutputPath) throws IOException {
         //ffmpeg.exe -ss 00:00:01 -i spring.mp4 -vframes 1 bb.jpg
         List<String> command = new java.util.ArrayList<String>();
         command.add(ffmpegEXE);
